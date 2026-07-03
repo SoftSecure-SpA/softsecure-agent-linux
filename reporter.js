@@ -2,14 +2,12 @@ import axios from 'axios';
 import logger from './logger.js';
 import { getAuthToken } from './authStore.js';
 
-const BACKEND_URL = process.env.BACKEND_URL;
-
 export async function reportAlert(alert) {
     const token = getAuthToken();
     if (!token) { logger.warn('⚠️ Sin token — alerta descartada'); return; }
 
     try {
-        await axios.post(`${BACKEND_URL}/soc-agent/agent/report`, alert, {
+        await axios.post(`${process.env.BACKEND_URL}/soc-agent/agent/report`, alert, {
             headers: { Authorization: `Bearer ${token}` },
             timeout: 10000,
         });
