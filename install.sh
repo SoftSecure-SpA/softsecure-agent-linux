@@ -45,12 +45,14 @@ fi
 echo "📁 Instalando archivos en $INSTALL_DIR..."
 mkdir -p "$INSTALL_DIR"
 cp -r . "$INSTALL_DIR/"
-chown -R "$RUN_USER:$RUN_USER" "$INSTALL_DIR"
 
-# Instalar dependencias
+# Instalar dependencias como root antes de cambiar ownership
 echo "📦 Instalando dependencias npm..."
 cd "$INSTALL_DIR"
-sudo -u "$RUN_USER" npm install --production
+npm install --omit=dev --no-fund --no-audit
+
+# Ahora sí cambiar ownership
+chown -R "$RUN_USER:$RUN_USER" "$INSTALL_DIR"
 
 # Configurar .env si no existe
 if [ ! -f "$INSTALL_DIR/.env" ]; then
